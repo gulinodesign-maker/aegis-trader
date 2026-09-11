@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": ".tmp-tests",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": [
+    "tests/**/*.ts",
+    "tests/**/*.d.ts",
+    "src/domain/types.ts",
+    "src/risk/position-sizing.ts",
+    "src/risk/risk-engine.ts",
+    "src/security/idempotency.ts",
+    "src/config/env-core.ts",
+    "src/broker/BrokerAdapter.ts",
+    "src/broker/PaperBrokerAdapter.ts",
+    "src/market/MarketDataProvider.ts",
+    "src/signal/indicators.ts",
+    "src/signal/signal-engine.ts",
+    "src/backtest/backtester.ts",
+    "src/execution/ExecutionEngine.ts"
+  ]
+}

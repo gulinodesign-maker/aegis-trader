@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.tmp-tests/
+coverage/
+.env
+.env.local
+.env.*.local
+.vercel/
+*.pem
+*.key
+*.p12
+*.pfx
+.DS_Store
+npm-debug.log*

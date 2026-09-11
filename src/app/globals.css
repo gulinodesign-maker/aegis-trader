@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --bg: #07090d;
+  --panel: #0f131a;
+  --panel-2: #151b24;
+  --line: rgba(255,255,255,.08);
+  --muted: #8993a4;
+  --text: #f4f7fb;
+  --accent: #7cdbb5;
+  --danger: #ff6b7a;
+  --warning: #f6c96b;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 30% -10%, rgba(73, 120, 255, .12), transparent 26rem),
+    var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+.safe-top { padding-top: max(18px, env(safe-area-inset-top)); }
+.safe-bottom { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+.app-width { width: min(100%, 760px); margin-inline: auto; }
+.card { border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.018)); border-radius: 22px; }
+.label { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.tabular { font-variant-numeric: tabular-nums; }
+.touch { min-height: 44px; min-width: 44px; }
+.skeleton { background: linear-gradient(90deg, #10151c, #18202a, #10151c); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+@keyframes shimmer { to { background-position-x: -200%; } }
+@media (display-mode: standalone) { body { user-select: none; } input, textarea { user-select: text; } }
