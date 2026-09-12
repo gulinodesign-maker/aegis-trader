@@ -1,6 +1,6 @@
 import type { BrokerAdapter } from "../broker/BrokerAdapter";
 import type { MarketDataProvider } from "../market/MarketDataProvider";
-import type { Signal, TradeProposal } from "../domain/types";
+import type { Signal } from "../domain/types";
 import { calculateAssetMetrics, generateSignal } from "../signal/signal-engine";
 import { calculatePositionSize, calculateRiskReward } from "../risk/position-sizing";
 import { backtestLongSignals } from "../backtest/backtester";
@@ -35,7 +35,7 @@ export interface AgentToolContext {
   fxRateToAccountCurrency: number;
 }
 
-export async function executeAgentTool(name: string, args: Record<string, unknown>, context: AgentToolContext) {
+export async function executeAgentTool(name: string, args: Record<string, unknown>, context: AgentToolContext): Promise<unknown> {
   switch (name) {
     case "get_market_status": return context.marketData.getMarketClock();
     case "get_quote": return context.marketData.getQuote(String(args.symbol));

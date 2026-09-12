@@ -2,6 +2,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { getEnv } from "../config/env";
 import { db } from "./client";
+import { toDbJson } from "./json";
 import type { TradeProposal } from "../domain/types";
 import { logEvent } from "../logging/logger";
 
@@ -26,7 +27,7 @@ export async function appendAgentRunEvent(runId: string | undefined, event: { ty
     const sql = db();
     await sql`
       update agent_runs
-      set tool_trace = tool_trace || ${sql.json([{ type: event.type, payload: event.payload, at: new Date().toISOString() }])}::jsonb
+      set tool_trace = tool_trace || ${sql.json(toDbJson([{ type: event.type, payload: event.payload, at: new Date().toISOString() }]))}::jsonb
       where id = ${runId}
     `;
   } catch (error) {
@@ -57,7 +58,7 @@ export async function recordTradeProposal(proposal: TradeProposal, agentRunId?: 
     ) values (
       ${proposal.id}, ${agentRunId ?? null}, ${proposal.symbol}, ${proposal.action}, ${proposal.confidence},
       ${proposal.entry}, ${proposal.stopLoss}, ${proposal.takeProfit}, ${proposal.riskReward}, ${proposal.positionSize},
-      ${proposal.thesis}, ${proposal.invalidation}, ${sql.json(proposal.signalIds)}
+      ${proposal.thesis}, ${proposal.invalidation}, ${sql.json(toDbJson(proposal.signalIds))}
     )
     on conflict (external_id) do update set external_id = excluded.external_id
     returning id

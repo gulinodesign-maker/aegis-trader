@@ -1,6 +1,7 @@
 import "server-only";
 import { getEnv } from "../config/env";
 import { db } from "./client";
+import { toDbJson } from "./json";
 import type { BrokerOrder, Quote, RiskDecision, Signal, TradeProposal } from "../domain/types";
 import { logEvent } from "../logging/logger";
 
@@ -24,8 +25,8 @@ export async function recordFilledTrade(input: {
         agent_reasoning_summary, risk_checks, opened_at
       ) values (
         ${input.orderRecordId}, ${input.mode}, ${input.order.symbol}, ${input.order.quantity}, ${input.order.averageFillPrice},
-        0, ${slippage}, ${sql.json(input.quote)}, ${sql.json(input.signal ? [input.signal] : [])},
-        ${input.proposal.thesis}, ${sql.json(input.risk)}, ${input.order.updatedAt}
+        0, ${slippage}, ${sql.json(toDbJson(input.quote))}, ${sql.json(toDbJson(input.signal ? [input.signal] : []))},
+        ${input.proposal.thesis}, ${sql.json(toDbJson(input.risk))}, ${input.order.updatedAt}
       ) returning id
     `;
     const updated = await sql<{ id: string }[]>`

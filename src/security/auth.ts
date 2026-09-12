@@ -21,7 +21,7 @@ function sign(payloadEncoded: string, secret: string) {
 }
 
 export function hashAccessCode(code: string) {
-  return createHash("sha256").update(code, "utf8").digest("hex");
+  return createHash("sha256").update(code).digest("hex");
 }
 
 export function verifyAccessCode(code: string, expectedSha256: string) {

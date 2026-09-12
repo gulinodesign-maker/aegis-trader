@@ -3,6 +3,7 @@ import type { BrokerOrder } from "../domain/types";
 import type { ExecutionIdempotencyStore, ExecutionIntent } from "../execution/ExecutionEngine";
 import { getEnv } from "../config/env";
 import { db } from "./client";
+import { toDbJson } from "./json";
 import { logEvent } from "../logging/logger";
 
 export class PostgresExecutionStore implements ExecutionIdempotencyStore {
@@ -17,7 +18,7 @@ export class PostgresExecutionStore implements ExecutionIdempotencyStore {
       ) values (
         ${intent.clientOrderId}, ${intent.idempotencyKey}, ${intent.mode}, ${intent.symbol}, 'BUY',
         ${intent.quantity}, 'MARKET', ${intent.stopLoss}, ${intent.takeProfit}, 'NEW',
-        ${sql.json({ proposalId: intent.proposalId })}
+        ${sql.json(toDbJson({ proposalId: intent.proposalId }))}
       )
       on conflict do nothing
       returning id
@@ -35,7 +36,7 @@ export class PostgresExecutionStore implements ExecutionIdempotencyStore {
     try {
       const sql = db();
       await sql`
-        update orders set broker_order_id = ${order.id}, status = ${order.status}, response_payload = ${sql.json(order)}, updated_at = now()
+        update orders set broker_order_id = ${order.id}, status = ${order.status}, response_payload = ${sql.json(toDbJson(order))}, updated_at = now()
         where id = ${recordId}
       `;
     } catch (error) {
@@ -50,7 +51,7 @@ export class PostgresExecutionStore implements ExecutionIdempotencyStore {
       const sql = db();
       // Keep the intent non-retriable until explicit reconciliation; do not assume the broker never received it.
       await sql`
-        update orders set response_payload = ${sql.json({ reconciliationRequired: true, errorCode: code.slice(0, 120) })}, updated_at = now()
+        update orders set response_payload = ${sql.json(toDbJson({ reconciliationRequired: true, errorCode: code.slice(0, 120) }))}, updated_at = now()
         where id = ${recordId}
       `;
     } catch (error) {

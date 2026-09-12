@@ -2,7 +2,7 @@ import "server-only";
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
 
 function deriveKey(secret: string) {
-  return createHash("sha256").update(secret).digest();
+  return Buffer.from(createHash("sha256").update(secret).digest("hex"), "hex");
 }
 
 export function encryptSensitive(plaintext: string, secret: string) {
